@@ -5,13 +5,21 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"unicode"
 )
 
 func main() {
+	var abbr rune
 	phrase := readString()
 	phraseArray := strings.Fields(phrase)
 	for _, val := range phraseArray {
+		if unicode.IsLetter(rune(val[0])) {
+			upperCaseLetter := unicode.ToUpper(rune(val[0]))
+			abbr += upperCaseLetter
+		}
+
 	}
+
 	// 1. Разбейте фразу на слова, используя `strings.Fields()`
 	// 2. Возьмите первую букву каждого слова и приведите
 	//    ее к верхнему регистру через `unicode.ToUpper()`
