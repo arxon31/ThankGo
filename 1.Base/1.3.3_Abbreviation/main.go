@@ -9,15 +9,20 @@ import (
 )
 
 func main() {
-	var abbr rune
+	var abbr string
+	var firstLetter string
+	var upperCaseLetter string
 	phrase := readString()
 	phraseArray := strings.Fields(phrase)
 	for _, val := range phraseArray {
-		if unicode.IsLetter(rune(val[0])) {
-			upperCaseLetter := unicode.ToUpper(rune(val[0]))
+		if unicode.IsLetter(rune(val[0])) && len(val) == len([]rune(val)) {
+			upperCaseLetter = strings.ToUpper(string(val[0]))
+			abbr += upperCaseLetter
+		} else if unicode.IsLetter(rune(val[0])) && len(val) != len([]rune(val)) {
+			firstLetter = val[:2]
+			upperCaseLetter = strings.ToUpper(firstLetter)
 			abbr += upperCaseLetter
 		}
-
 	}
 
 	// 1. Разбейте фразу на слова, используя `strings.Fields()`
