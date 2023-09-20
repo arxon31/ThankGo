@@ -34,9 +34,11 @@ func main() {
 	acc, trans, err := parseInput()
 	if err != nil {
 		fmt.Println(err)
+		return
+	} else {
+		fmt.Print("-> ")
+		fmt.Println(acc, trans)
 	}
-	fmt.Print("-> ")
-	fmt.Println(acc, trans)
 
 }
 
@@ -45,9 +47,12 @@ func parseInput() (account, []int, error) {
 	accSrc, transSrc := readInput()
 	acc, err := parseAccount(accSrc)
 	if err != nil {
-		fmt.Println(err)
+		return account{}, nil, err
 	}
-	trans := parseTransactions(transSrc)
+	trans, err := parseTransactions(transSrc)
+	if err != nil {
+		return account{}, nil, err
+	}
 	return acc, trans, err
 }
 
@@ -72,11 +77,11 @@ func parseAccount(src string) (account, error) {
 	parts := strings.Split(src, "/")
 	balance, err := strconv.Atoi(parts[0])
 	if err != nil {
-		fmt.Println(err)
+		return account{}, err
 	}
 	overdraft, err := strconv.Atoi(parts[1])
 	if err != nil {
-		fmt.Println(err)
+		return account{}, err
 	}
 	if overdraft < 0 {
 		//panic("expect overdraft >= 0")
@@ -91,14 +96,14 @@ func parseAccount(src string) (account, error) {
 
 // parseTransactions парсит список транзакций из строки
 // в формате [t1 t2 t3 ... tn].
-func parseTransactions(src []string) []int {
+func parseTransactions(src []string) ([]int, error) {
 	trans := make([]int, len(src))
 	for idx, s := range src {
 		t, err := strconv.Atoi(s)
 		if err != nil {
-			fmt.Println(err)
+			return nil, err
 		}
 		trans[idx] = t
 	}
-	return trans
+	return trans, nil
 }
